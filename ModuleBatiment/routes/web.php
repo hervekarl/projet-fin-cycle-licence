@@ -1,0 +1,78 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\SalleController;
+use App\Http\Controllers\NiveauController;
+use App\Http\Controllers\BatimentController;
+use App\Http\Controllers\PossederController;
+use App\Http\Controllers\EquipementController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+
+// Routes pour le contrôleur Batiment
+Route::prefix('batiment')->group(function(){
+    
+    Route::get('/read', [BatimentController::class, 'index'])->name('batiment.index');
+    Route::get('/read/{id_bat}', [BatimentController::class, 'show'])->name('batiment.show');
+    Route::post('/create/{nbre_niveau}', [BatimentController::class, 'store'])->name('batiment.store');
+    Route::put('/update/{id_bat}/{nbre_niveau}', [BatimentController::class, 'update'])->name('batiment.update');
+    Route::delete('/delete/{id_bat}', [BatimentController::class, 'destroy'])->name('batiment.destroy');
+});
+
+
+// Routes pour le contrôleur Niveau
+Route::prefix('niveau')->group(function(){
+    
+    Route::get('/read', [NiveauController::class, 'index'])->name('niveau.index');
+    Route::get('/read/{id_niv}', [NiveauController::class, 'show'])->name('niveau.show');
+    Route::post('/create/{num_etage}/{nbre_salle}/{id_bat}', [NiveauController::class, 'store'])->name('niveau.store');
+    Route::put('/update/{id_niv}/{num_etage}/{nbre_salle}/{id_bat}', [NiveauController::class, 'update'])->name('niveau.update');
+    Route::delete('/delete/{id_niv}', [NiveauController::class, 'destroy'])->name('niveau.destroy');
+});
+
+
+// Routes pour le contrôleur Salle
+Route::prefix('salle')->group(function(){
+    
+    Route::get('/read', [SalleController::class, 'index'])->name('salle.index');
+    Route::get('/read/{id_sal}', [SalleController::class, 'show'])->name('salle.show');
+    Route::post('/create/{nom}/{type}/{id_niv}', [SalleController::class, 'store'])->name('salle.store');
+    Route::put('/update/{id_sal}/{nom}/{type}/{id_niv}', [SalleController::class, 'update'])->name('salle.update');
+    Route::delete('/delete/{id_sal}', [SalleController::class, 'destroy'])->name('salle.destroy');
+});
+
+
+// Routes pour le contrôleur Equipement
+Route::prefix('equipement')->group(function(){
+    
+    Route::get('/read', [EquipementController::class, 'index'])->name('equipement.index');
+    Route::get('/read/{id_equipl}', [EquipementController::class, 'show'])->name('equipement.show');
+    Route::post('/create/{nom}/{type}', [EquipementController::class, 'store'])->name('equipement.store');
+    Route::put('/update/{id_equip}/{nom}/{type}', [EquipementController::class, 'update'])->name('equipement.update');
+    Route::delete('/delete/{id_equip}', [EquipementController::class, 'destroy'])->name('equipement.destroy');
+});
+
+
+// Routes pour le contrôleur Posseder
+Route::prefix('posseder')->group(function(){
+    
+    Route::get('/read', [PossederController::class, 'index'])->name('posseder.index');
+    Route::get('/read/{id_sal}/{id_equip}/{date_debut}', [PossederController::class, 'show'])->name('posseder.show');
+    Route::get('/read/{id_sal}/{id_equip}', [PossederController::class, 'index_show'])->name('posseder.index_show');
+    Route::post('/create/{id_sal}/{id_equip}', [PossederController::class, 'store'])->name('posseder.store');
+    Route::put('/update/{id_sal}/{id_equip}/{date_debut}/{date_fin}', [PossederController::class, 'update'])->name('posseder.update');
+    Route::delete('/delete/{id_sal}/{id_equip}/{date_debut}', [PossederController::class, 'destroy'])->name('posseder.destroy');
+});
+
