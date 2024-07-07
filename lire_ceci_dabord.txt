@@ -1,0 +1,71 @@
+Pour exceuter ces modules il faut d'abord installer les packages du fichier package_api.txt 
+en supposant que vous avez python deja installer dans votre machine taper pip install -r package_api.txt
+
+executer la comande "python manage.py makemigrations" pour effectuer les migrations
+
+executer ensuite "python manage.py migrate" pour envoyer les migrations
+
+lancer le serveur avec "python manage.py runserver num_port(facultatif)"
+
+
+
+
+POUR LE MODULE PATIENT
+
+localhost:numero_port/    affiche la liste des patient
+
+localhost:numero_port/CreatePatient/   affiche la liste des patient ainsi le formulaire pour creer de nouveauc patient
+
+localhost:numero_port/UpdatePatient/id_patient(un entier) pour modifier les information d'un patient
+
+localhost:numero_port/DetailPatient/id_patient  pour les detail sur un patient
+
+localhost:numero_port/DeletePatient/id_patient  pour supprimer un patient
+
+localhost:numero_port/Care/  pour les services en cour
+
+localhost:numero_port/Care/Facture/
+
+localhost:numero_port/Care/Facture/id/Detail/
+
+localhost:numero_port/Care/Travaille/        pour les tâches attribuer aux employer
+
+localhost:numero_port/Care/Travaille/id/Detail
+
+
+localhost:numero_port/Care/ChargeDuPatient/  pour l'employer qui s'occupera du patient
+
+
+localhost:numero_port/Care/ChargeDuPatient/id/Detail
+
+localhost:numero_port/Care/Rendez-vous/
+
+
+localhost:numero_port/CareRendez-vous/id/Detail
+
+
+DANS LE MODULE INFRASTRUCTURE
+
+ceux-ci sont précédé de localhost:numero_port
+Batiment/id/Datail
+Equipement/
+Equipement/id/Detail
+
+Salle/
+Salle/Detail
+
+Niveau/
+Niveau/id/Detail'
+
+
+POUR L MODULE RESSOURCE HUMAIN
+
+Service/
+Service/id/Detail
+
+Foncton/
+Foction/id/Detail
+
+Employer/id/Detail
+
+
