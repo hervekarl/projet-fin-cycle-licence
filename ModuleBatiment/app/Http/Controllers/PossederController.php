@@ -8,87 +8,115 @@ use Illuminate\Http\Request;
 
 class PossederController extends Controller
 {
-
-//-------
-
-    public function store($id_sal, $id_equip, Request $request)
+    public function store($id_sal, $id_equip)
     {
-
-        // $date_debut = date('2023-07-03');
-
-        $date_debut = new DateTime();
-        echo $date_debut->format('Y-m-d');
-
-        // $posseder = new Posseder();
-
-        // dd($posseder);
+        $now = new DateTime();
 
         $this->end_possession($id_sal, $id_equip);
 
-        Posseder::create([
+        $posseder = Posseder::create([
             'id_salle' => $id_sal,
             'id_equipement' => $id_equip,
-            'date_debut' => $date_debut,
+            'date_debut' => $now,
         ]);
+
+        if(is_null($posseder))
+            return "";
+
+        return "Ajout reussit";
+    }
+
+    public function create(Request $request)
+    {
+        $posseder = $request->all();
+
+        $temp = [];
+
+        foreach($posseder as $key => $value)
+        {
+            array_push($temp, $value);
+        }
+
+        return $this->store($temp[0], $temp[1]);
     }
     
     public function show($id_sal, $id_equip, $date_debut)
     {
-        $equipement = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->firstOrFail();
-        return $equipement;
+        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->first();
+        
+        if(is_null($posseder))
+            return null;
+
+        return $posseder;
     }
 
     public function index_show($id_sal, $id_equip)
     {
-        $equipements = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip])->get();
+        $posseders = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip])->get();
 
-        dd($equipements);
+        if(is_null($posseders))
+            return null;
 
-        return $equipements;
+        return $posseders;
     }
     
     public function index()
     {
-        $equipements = Posseder::all();
-        dd($equipements);
+        $posseders = Posseder::all();
 
-        return $equipements;
+        return $posseders;
     }
         
-    public function update(Request $request, $id_sal, $id_equip, $date_debut, $date_fin)
+    public function update($id_sal, $id_equip, $date_debut, $date_fin)
     {
-        Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->update([
-            'id_salle' => $id_sal,
-            'id_equipement' => $id_equip,
-            'date_debut' => $date_debut,
-            'date_fin' => $date_fin,
-        ]);
-        // Posseder::findOrFail($id)->update($request->all());
-        // return redirect()->route('equipement.index');
+        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
+        
+        if(is_null($posseder->first()))
+            return null; //Enregistrement n'existe pas
+    
+        try
+        {
+            $posseder->update([
+                'id_salle' => $id_sal,
+                'id_equipement' => $id_equip,
+                'date_debut' => $date_debut,
+                'date_fin' => $date_fin,
+            ]);
+
+            return "Mise à jour reussit";
+        }
+        catch(QueryException $e)
+        {
+            return ""; //Mise à jour echouee
+        }
     }
 
     public function end_possession($id_sal, $id_equip)
     {
-        $date_fin = new DateTime();
-        $date_fin = $date_fin->format('Y-m-d');
+        $now = new DateTime();
 
         $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_fin' => null]);
-
-        // dd($posseder);
 
         if(!is_null($posseder->first()))
             $posseder->update([
                 'id_salle' => $id_sal,
                 'id_equipement' => $id_equip,
                 'date_debut' => $posseder->first()->date_debut,
-                'date_fin' => $date_fin,
+                'date_fin' => $now,
             ]);
     }
 
     public function destroy($id_sal, $id_equip, $date_debut)
     {
-        Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->delete();
-        // return redirect()->route('equipement.index');
+        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
+        $posseder2 = $posseder->first();
+
+        if(is_null($posseder2))
+            return "null";
+
+        $posseder->delete();
+
+        return $posseder2;
     }
 }
 

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('niveau', function (Blueprint $table) {
-            $table->bigIncrements('id_niveau');
-            $table->bigInteger('numero_etage')->nullable();
-            $table->bigInteger('nbre_salle')->nullable();
-            $table->bigInteger('id_batiment')->unsigned()->nullable();
+            $table->increments('id_niveau');
+            $table->integer('numero_etage');
+            $table->integer('nbre_salle');
+            $table->integer('id_batiment')->unsigned();
 
             $table->foreign('id_batiment')->references('id_batiment')->on('batiment');
         });

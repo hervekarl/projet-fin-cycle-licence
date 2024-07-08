@@ -12,8 +12,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('posseder', function (Blueprint $table) {
-            $table->bigInteger('id_salle')->unsigned();
-            $table->bigInteger('id_equipement')->unsigned();
+            $table->integer('id_salle')->unsigned();
+            $table->integer('id_equipement')->unsigned();
             $table->date('date_debut');
             $table->date('date_fin')->nullable();
 

@@ -9,19 +9,5 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
-    public function control()
-    {
-        // $clients = Client::all();
-
-        // dd($clients);
-        return view('welcome');
-    }
-
-    public function u()
-    {
-        // $clients = Client::all();
-
-        // dd($clients);
-        return view('come');
-    }
+    use AuthorizesRequests, ValidatesRequests;
 }
