@@ -20,6 +20,11 @@ use App\Http\Controllers\EquipementController;
 |
 */
 
+Route::get('/', function(){
+    
+    return view('welcome');
+});
+
 
 // Routes pour le contrôleur Batiment
 Route::prefix('batiment')->group(function(){

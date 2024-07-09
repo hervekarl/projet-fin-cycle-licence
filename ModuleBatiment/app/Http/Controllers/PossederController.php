@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Posseder;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class PossederController extends Controller
 {
@@ -12,18 +13,27 @@ class PossederController extends Controller
     {
         $now = new DateTime();
 
-        $this->end_possession($id_sal, $id_equip);
+        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_fin' => null]);
+        
+        try
+        {
+            $this->end_possession($posseder);
 
-        $posseder = Posseder::create([
-            'id_salle' => $id_sal,
-            'id_equipement' => $id_equip,
-            'date_debut' => $now,
-        ]);
+            $posseder2 = Posseder::create([
+                'id_salle' => $id_sal,
+                'id_equipement' => $id_equip,
+                'date_debut' => $now,
+            ]);
+            
+            if(is_null($posseder2))
+                return "";
 
-        if(is_null($posseder))
-            return "";
-
-        return "Ajout reussit";
+            return "Ajout reussit";
+        }
+        catch(QueryException $e)
+        {
+            return ""; //Ajout echouee
+        }
     }
 
     public function create(Request $request)
@@ -91,17 +101,17 @@ class PossederController extends Controller
         }
     }
 
-    public function end_possession($id_sal, $id_equip)
+    public function end_possession($posseder)
     {
         $now = new DateTime();
 
-        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_fin' => null]);
+        $posseder2 = $posseder->first();
 
-        if(!is_null($posseder->first()))
+        if(!is_null($posseder2))
             $posseder->update([
-                'id_salle' => $id_sal,
-                'id_equipement' => $id_equip,
-                'date_debut' => $posseder->first()->date_debut,
+                'id_salle' => $posseder2->id_sal,
+                'id_equipement' => $posseder2->id_equip,
+                'date_debut' => $posseder2->date_debut,
                 'date_fin' => $now,
             ]);
     }
@@ -117,6 +127,14 @@ class PossederController extends Controller
         $posseder->delete();
 
         return $posseder2;
+    }
+
+    public function truncate()
+    {
+        Posseder::truncate();
+        // Posseder::query()->delete();
+
+        return "Table videe";
     }
 }
 
