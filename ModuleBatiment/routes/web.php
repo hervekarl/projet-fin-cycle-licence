@@ -21,7 +21,6 @@ use App\Http\Controllers\EquipementController;
 */
 
 Route::get('/', function(){
-    
     return view('welcome');
 });
 

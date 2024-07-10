@@ -13,19 +13,19 @@ class PossederController extends Controller
     {
         $now = new DateTime();
 
-        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_fin' => null]);
+        $possession = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_fin' => null]);
         
         try
         {
-            $this->end_possession($posseder);
+            $this->end_possession($possession);
 
-            $posseder2 = Posseder::create([
+            $possession2 = Posseder::create([
                 'id_salle' => $id_sal,
                 'id_equipement' => $id_equip,
                 'date_debut' => $now,
             ]);
             
-            if(is_null($posseder2))
+            if(is_null($possession2))
                 return "";
 
             return "Ajout reussit";
@@ -38,55 +38,48 @@ class PossederController extends Controller
 
     public function create(Request $request)
     {
-        $posseder = $request->all();
+        $possession = $request->all();
 
-        $temp = [];
-
-        foreach($posseder as $key => $value)
-        {
-            array_push($temp, $value);
-        }
-
-        return $this->store($temp[0], $temp[1]);
+        return $this->store($possession['id_salle'], $possession['id_equipement']);
     }
     
     public function show($id_sal, $id_equip, $date_debut)
     {
-        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->first();
+        $possession = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->first();
         
-        if(is_null($posseder))
+        if(is_null($possession))
             return null;
 
-        return $posseder;
+        return $possession;
     }
 
     public function index_show($id_sal, $id_equip)
     {
-        $posseders = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip])->get();
+        $possessions = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip])->get();
 
-        if(is_null($posseders))
+        if(is_null($possessions))
             return null;
 
-        return $posseders;
+        return $possessions;
     }
     
     public function index()
     {
-        $posseders = Posseder::all();
+        $possessions = Posseder::all();
 
-        return $posseders;
+        return $possessions;
     }
         
     public function update($id_sal, $id_equip, $date_debut, $date_fin)
     {
-        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
+        $possession = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
         
-        if(is_null($posseder->first()))
+        if(is_null($possession->first()))
             return null; //Enregistrement n'existe pas
     
         try
         {
-            $posseder->update([
+            $possession->update([
                 'id_salle' => $id_sal,
                 'id_equipement' => $id_equip,
                 'date_debut' => $date_debut,
@@ -101,32 +94,32 @@ class PossederController extends Controller
         }
     }
 
-    public function end_possession($posseder)
+    public function end_possession($possession)
     {
         $now = new DateTime();
 
-        $posseder2 = $posseder->first();
+        $possession2 = $possession->first();
 
-        if(!is_null($posseder2))
-            $posseder->update([
-                'id_salle' => $posseder2->id_sal,
-                'id_equipement' => $posseder2->id_equip,
-                'date_debut' => $posseder2->date_debut,
+        if(!is_null($possession2))
+            $possession->update([
+                'id_salle' => $possession2->id_sal,
+                'id_equipement' => $possession2->id_equip,
+                'date_debut' => $possession2->date_debut,
                 'date_fin' => $now,
             ]);
     }
 
     public function destroy($id_sal, $id_equip, $date_debut)
     {
-        $posseder = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
-        $posseder2 = $posseder->first();
+        $possession = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
+        $possession2 = $possession->first();
 
-        if(is_null($posseder2))
+        if(is_null($possession2))
             return "null";
 
-        $posseder->delete();
+        $possession->delete();
 
-        return $posseder2;
+        return $possession2;
     }
 
     public function truncate()
