@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Batiment(models.Model):
-    photo_batiment=models.ImageField(upload_to='./infrastructure/batiment', default=None, null=True)
+    photo_batiment=models.ImageField(upload_to='./IS/batiment', default=None, null=True)
     nom_batiment=models.CharField(max_length=100)
     nombre_niveau=models.IntegerField()
     class Meta:
@@ -29,19 +29,17 @@ class Niveau(models.Model):
         verbose_name_plural ="Niveaux"
 
     def __str__(self):
-        return "Niveau"
+        return f"Niveau {self.id}"
 
     def get_absolute_url(self):
         return reverse("Niveau_detail", kwargs={"pk": self.pk})
 
 
 class Salle(models.Model):
-    photo_salle=models.ImageField(upload_to='./infrastructure/salle', default=None, null=True)
+    photo_salle=models.ImageField(upload_to='./IS/salle', default=None, null=True)
     nom_salle=models.CharField(max_length=100)
     type_salle=models.CharField(max_length=100)
     niveau_salle=models.ForeignKey(Niveau, on_delete=models.CASCADE)
-
-    
 
     class Meta:
         db_table="Salle"
@@ -57,7 +55,7 @@ class Salle(models.Model):
     
 
 class Equipement(models.Model):
-    photo_equip=models.ImageField(upload_to='./infrastructure/equipement', default=None, null=True)
+    photo_equip=models.ImageField(upload_to='./IS/equipement', default=None, null=True)
     nom_equipement=models.CharField(max_length=100)
     type_equipement=models.CharField(max_length=100)
     salle_equipement=models.ManyToManyField(Salle, through="Posseder")

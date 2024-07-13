@@ -20,14 +20,7 @@ class Service(models.Model):
         return reverse("Service_detail", kwargs={"pk": self.pk})
 
 class Employer(models.Model):
-    nom_employer = models.CharField(max_length=100)
-    prenom_employer = models.CharField(max_length=100)
-    sexe_employer = models.CharField(max_length=100)
-    specialite = models.CharField(max_length=100, null=True)
-    adresse_employer = models.CharField(max_length=150)
-    tel_employer = models.CharField(max_length=13)
-    compte_employer = models.CharField(max_length=100, null=True)
-    salaire_employer = models.CharField(max_length=100, null=True)
+    numero_employer = models.IntegerField()
     travail = models.ManyToManyField(Service, through='Travailler')
 
     class Meta:
@@ -68,9 +61,28 @@ class Travailler(models.Model):
 class RendezVous(models.Model):
     patient_rdv=models.ForeignKey(Patient, on_delete=models.CASCADE)
     personel_rdv=models.IntegerField()
-    date_rdv=models.DateField()
+    jour_rdv=models.DateField()
     heure_rdv=models.TimeField()
+
     
     class Meta:
         db_table='RendezVous'
-        unique_together=('patient_rdv', 'personel_rdv', 'date_rdv', 'heure_rdv')
+        unique_together=('patient_rdv', 'personel_rdv', 'jour_rdv', 'heure_rdv')
+
+class OccupationSalle(models.Model):
+    patient_id=models.ForeignKey(Patient, on_delete=models.CASCADE)
+    salle_id=models.IntegerField()
+    jour_arrive=models.DateTimeField()
+    jour_sorti=models.DateTimeField(null=True)
+
+
+    class Meta:
+        db_table="Occupation"
+        verbose_name = "Occupation"
+        verbose_name_plural = "Occupations"
+
+    def __str__(self):
+        return self.patient_id
+
+    def get_absolute_url(self):
+        return reverse("Occupation_detail", kwargs={"pk": self.pk})

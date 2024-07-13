@@ -9,6 +9,7 @@ class EmployerSerializer(serializers.ModelSerializer):
        
 class TravaillerSerializer(serializers.ModelSerializer):
     url=serializers.HyperlinkedIdentityField(view_name="TacheDetail", lookup_field='pk')
+    id_employer=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Travailler
         fields="__all__"
@@ -33,4 +34,10 @@ class RdvSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RendezVous
+        fields="__all__"
+
+
+class OccupationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=OccupationSalle
         fields="__all__"

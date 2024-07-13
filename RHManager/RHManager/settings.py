@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'db_RH',     # Nom de votre base de données pour Service
         'USER': 'postgres',       # Utilisateur de votre base de données
         'PASSWORD': 'juniorherve',# Mot de passe de votre utilisateur
-        'HOST': 'localhost',      # Localhost pour une base de données en local
+        'HOST': '0.0.0.0',      # Localhost pour une base de données en local
         'PORT': '5432',           # Port par défaut pour PostgreSQL
     },
     'RH': {
@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'db_RH',     # Nom de votre base de données pour Service
         'USER': 'postgres',       # Utilisateur de votre base de données
         'PASSWORD': 'juniorherve',# Mot de passe de votre utilisateur
-        'HOST': 'localhost',      # Localhost pour une base de données en local
+        'HOST': '0.0.0.0',      # Localhost pour une base de données en local
         'PORT': '5432',           # Port par défaut pour PostgreSQL
     },
 }

@@ -10,4 +10,5 @@ urlpatterns = [
     path('Salle/<str:pk>/Detail', ListeSalle.as_view(), name="salleDetail"),
     path('Niveau/', ListeNiveau.as_view(), name="niveau"),
     path('Niveau/<str:pk>/Detail', ListeNiveau.as_view(), name="niveauDetail"),
+    path("OccupationSalle/", OccupationSalle.as_view())
 ]

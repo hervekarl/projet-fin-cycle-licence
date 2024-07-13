@@ -3,8 +3,8 @@ from django.db import models
 
 class Patient(models.Model):
     photo_patient = models.ImageField(upload_to="Photo_patients", null=True)
-    nom_patient = models.CharField(max_length=80)
-    prenom_patient = models.CharField(max_length=80)
+    nom_patient = models.CharField(max_length=80, null=True)
+    prenom_patient = models.CharField(max_length=80, null=True)
     date_nais_pat = models.DateField(null=True)
     age_patient = models.IntegerField()
     sexe_patient = models.CharField(max_length=1)
