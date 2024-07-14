@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\NiveauController;
+use App\Http\Controllers\OccuperController;
 use App\Http\Controllers\BatimentController;
 use App\Http\Controllers\PossederController;
 use App\Http\Controllers\EquipementController;
@@ -76,6 +77,20 @@ Route::prefix('equipement')->group(function(){
     // Route::delete('/delete', [EquipementController::class, 'truncate'])->name('equipement.truncate');
 });
 
+// Routes pour le contrôleur Patient
+Route::prefix('patient')->group(function(){
+    
+    Route::get('/read', [PatientController::class, 'index'])->name('patient.index');
+    Route::get('/read/{id_pat}', [PatientController::class, 'show'])->name('patient.show');
+    // Route::post('/create/{nom}/{prenom}/{age}/{sexe}/{adresse}/{tel}', [PatientController::class, 'update'])->name('patient.update');
+    Route::post('/create/{num}', [PatientController::class, 'store'])->name('patient.store');
+    Route::post('/create', [PatientController::class, 'create'])->name('patient.create');
+    // Route::put('/update/{id_pat}/{nom}/{prenom}/{age}/{sexe}/{adresse}/{tel}', [PatientController::class, 'update'])->name('patient.update');
+    Route::put('/update/{id_pat}/{num}', [PatientController::class, 'update'])->name('patient.update');
+    Route::delete('/delete/{id_pat}', [PatientController::class, 'destroy'])->name('patient.destroy');
+    // Route::delete('/delete', [PatientController::class, 'truncate'])->name('patient.truncate');
+});
+
 
 // Routes pour le contrôleur Posseder
 Route::prefix('posseder')->group(function(){
@@ -90,3 +105,15 @@ Route::prefix('posseder')->group(function(){
     Route::delete('/delete', [PossederController::class, 'truncate'])->name('posseder.truncate');
 });
 
+// Routes pour le contrôleur Occuper
+Route::prefix('occuper')->group(function(){
+    
+    Route::get('/read', [OccuperController::class, 'index'])->name('occuper.index');
+    Route::get('/read/{id_sal}/{id_pat}/{date_debut}', [OccuperController::class, 'show'])->name('occuper.show');
+    Route::get('/read/{id_sal}/{id_pat}', [OccuperController::class, 'index_show'])->name('occuper.index_show');
+    Route::post('/create/{id_sal}/{id_pat}', [OccuperController::class, 'store'])->name('occuper.store');
+    Route::post('/create', [OccuperController::class, 'create'])->name('occuper.create');
+    Route::put('/update/{id_sal}/{id_pat}/{date_debut}/{date_fin}', [OccuperController::class, 'update'])->name('occuper.update');
+    Route::delete('/delete/{id_sal}/{id_pat}/{date_debut}', [OccuperController::class, 'destroy'])->name('occuper.destroy');
+    Route::delete('/delete', [OccuperController::class, 'truncate'])->name('occuper.truncate');
+});

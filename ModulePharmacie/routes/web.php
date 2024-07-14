@@ -30,9 +30,11 @@ Route::prefix('patient')->group(function(){
     
     Route::get('/read', [PatientController::class, 'index'])->name('patient.index');
     Route::get('/read/{id_pat}', [PatientController::class, 'show'])->name('patient.show');
-    Route::post('/create/{nom}/{prenom}/{age}/{sexe}/{adresse}/{tel}', [PatientController::class, 'store'])->name('patient.store');
+    // Route::post('/create/{nom}/{prenom}/{age}/{sexe}/{adresse}/{tel}', [PatientController::class, 'update'])->name('patient.update');
+    Route::post('/create/{num}', [PatientController::class, 'store'])->name('patient.store');
     Route::post('/create', [PatientController::class, 'create'])->name('patient.create');
-    Route::put('/update/{id_pat}/{nom}/{prenom}/{age}/{sexe}/{adresse}/{tel}', [PatientController::class, 'update'])->name('patient.update');
+    // Route::put('/update/{id_pat}/{nom}/{prenom}/{age}/{sexe}/{adresse}/{tel}', [PatientController::class, 'update'])->name('patient.update');
+    Route::put('/update/{id_pat}/{num}', [PatientController::class, 'update'])->name('patient.update');
     Route::delete('/delete/{id_pat}', [PatientController::class, 'destroy'])->name('patient.destroy');
     // Route::delete('/delete', [PatientController::class, 'truncate'])->name('patient.truncate');
 
@@ -44,9 +46,11 @@ Route::prefix('employe')->group(function(){
     
     Route::get('/read', [EmployeController::class, 'index'])->name('employe.index');
     Route::get('/read/{id_emp}', [EmployeController::class, 'show'])->name('employe.show');
-    Route::post('/create/{nom}/{prenom}/{sexe}/{adresse}/{tel}/{date}/{compte}/{salaire}', [EmployeController::class, 'store'])->name('employe.store');
+    // Route::post('/create/{nom}/{prenom}/{sexe}/{adresse}/{tel}/{date}/{compte}/{salaire}', [EmployeController::class, 'store'])->name('employe.store');
+    Route::post('/create/{num}', [EmployeController::class, 'store'])->name('employe.store');
     Route::post('/create', [EmployeController::class, 'create'])->name('employe.create');
-    Route::put('/update/{id_emp}/{nom}/{prenom}/{sexe}/{adresse}/{tel}/{date}/{compte}/{salaire}', [EmployeController::class, 'update'])->name('employe.update');
+    // Route::put('/update/{id_emp}/{nom}/{prenom}/{sexe}/{adresse}/{tel}/{date}/{compte}/{salaire}', [EmployeController::class, 'update'])->name('employe.update');
+    Route::put('/update/{id_emp}/{num}', [EmployeController::class, 'update'])->name('employe.update');
     Route::delete('/delete/{id_emp}', [EmployeController::class, 'destroy'])->name('employe.destroy');
     // Route::delete('/delete', [EmployeController::class, 'truncate'])->name('employe.truncate');
 

@@ -17,14 +17,16 @@ class EmployeFactory extends Factory
     public function definition(): array
     {
         return [
-            'nom_employe' => fake()->lastName,
-            'prenom_employe' => fake()->firstName,
-            'sexe_employe' => fake()->randomElement(['Masculin', 'Féminin']),
-            'adresse_employe' => fake()->address,
-            'tel_employe' => fake()->numerify('##########'),
-            'date_naiss_employe' => fake()->date(),
-            'compte_employe' => fake()->unique()->numberBetween(1000, 9999),
-            'salaire_employe' => fake()->randomFloat(2, 1000, 10000),
+            'numero_employe' => fake()->numberBetween(1, 20),
+
+            // 'nom_employe' => fake()->lastName,
+            // 'prenom_employe' => fake()->firstName,
+            // 'sexe_employe' => fake()->randomElement(['Masculin', 'Féminin']),
+            // 'adresse_employe' => fake()->address,
+            // 'tel_employe' => fake()->numerify('##########'),
+            // 'date_naiss_employe' => fake()->date(),
+            // 'compte_employe' => fake()->unique()->numberBetween(1000, 9999),
+            // 'salaire_employe' => fake()->randomFloat(2, 1000, 10000),
         ];
     }
 }
