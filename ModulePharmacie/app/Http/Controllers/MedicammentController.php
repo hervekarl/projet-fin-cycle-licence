@@ -17,10 +17,9 @@ class MedicammentController extends Controller
         ]);
 
         if(is_null($medicamment))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
-    }
+        return RequestReturns::INSERT_SUCCESSFUL;    }
 
     public function create(Request $request)
     {
@@ -34,7 +33,7 @@ class MedicammentController extends Controller
         $medicamment = Medicamment::find($id_med);
 
         if(is_null($medicamment))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $medicamment;
     }
@@ -51,7 +50,7 @@ class MedicammentController extends Controller
         $medicamment = Medicamment::find($id_med);
 
         if(is_null($medicamment))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -62,11 +61,11 @@ class MedicammentController extends Controller
                 'categorie_medicamment' => $categorie,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -75,7 +74,7 @@ class MedicammentController extends Controller
         $medicamment = Medicamment::find($id_med);
 
         if(is_null($medicamment))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -86,7 +85,7 @@ class MedicammentController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 }

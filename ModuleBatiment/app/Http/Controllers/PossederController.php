@@ -6,6 +6,7 @@ use DateTime;
 use App\Models\Posseder;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
 
 class PossederController extends Controller
 {
@@ -26,13 +27,13 @@ class PossederController extends Controller
             ]);
             
             if(is_null($possession2))
-                return "";
+                return RequestReturns::NOT_EXIST;
 
-            return "Ajout reussit";
+            return RequestReturns::INSERT_SUCCESSFUL;        
         }
         catch(QueryException $e)
         {
-            return ""; //Ajout echouee
+            return RequestReturns::INSERT_FAILED;        
         }
     }
 
@@ -48,7 +49,7 @@ class PossederController extends Controller
         $possession = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut])->first();
         
         if(is_null($possession))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $possession;
     }
@@ -58,7 +59,7 @@ class PossederController extends Controller
         $possessions = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip])->get();
 
         if(is_null($possessions))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $possessions;
     }
@@ -75,7 +76,7 @@ class PossederController extends Controller
         $possession = Posseder::where(['id_salle' => $id_sal, 'id_equipement' => $id_equip, 'date_debut' => $date_debut]);
         
         if(is_null($possession->first()))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
     
         try
         {
@@ -86,27 +87,12 @@ class PossederController extends Controller
                 'date_fin' => $date_fin,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
-    }
-
-    public function end_possession($possession)
-    {
-        $now = new DateTime();
-
-        $possession2 = $possession->first();
-
-        if(!is_null($possession2))
-            $possession->update([
-                'id_salle' => $possession2->id_sal,
-                'id_equipement' => $possession2->id_equip,
-                'date_debut' => $possession2->date_debut,
-                'date_fin' => $now,
-            ]);
     }
 
     public function destroy($id_sal, $id_equip, $date_debut)
@@ -115,10 +101,9 @@ class PossederController extends Controller
         $possession2 = $possession->first();
 
         if(is_null($possession2))
-            return "null";
+            return RequestReturns::NOT_EXIST;
 
         $possession->delete();
-
         return $possession2;
     }
 
@@ -127,8 +112,25 @@ class PossederController extends Controller
         Posseder::truncate();
         // Posseder::query()->delete();
 
-        return "Table videe";
+        return RequestReturns::DELETE_SUCCESSFUL;
     }
-}
+
+    //---------------------------------------------------------------------------------------------------
+
+    public function end_possession($possession)
+    {
+        $now = new DateTime();
+    
+        $possession2 = $possession->first();
+    
+        if(!is_null($possession2))
+            $possession->update([
+                'id_salle' => $possession2->id_sal,
+                'id_equipement' => $possession2->id_equip,
+                'date_debut' => $possession2->date_debut,
+                'date_fin' => $now,
+            ]);
+    }
+}    
 
 // $response = Http::withHeaders($headers)->{$request->method()}($url, $request->except(['_token_', '_method']));

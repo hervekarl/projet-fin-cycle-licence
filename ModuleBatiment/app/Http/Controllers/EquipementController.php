@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Equipement;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
+
 
 class EquipementController extends Controller
 {
@@ -16,23 +18,15 @@ class EquipementController extends Controller
         ]);
 
         if(is_null($equipement))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
-    }
+        return RequestReturns::INSERT_SUCCESSFUL;    }
 
     public function create(Request $request)
     {
         $equipement = $request->all();
 
-        $temp = [];
-
-        foreach($equipement as $key => $value)
-        {
-            array_push($temp, $value);
-        }
-
-        return $this->store($temp[0], $temp[1]);
+        return $this->store($equipement["nom_equipement"], $equipement["type_equipement"]);
     }
     
     public function show($id_equip)
@@ -40,7 +34,7 @@ class EquipementController extends Controller
         $equipement = Equipement::find($id_equip);
 
         if(is_null($equipement))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $equipement;
     }
@@ -57,7 +51,7 @@ class EquipementController extends Controller
         $equipement = Equipement::find($id_equip);
 
         if(is_null($equipement))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -67,11 +61,11 @@ class EquipementController extends Controller
                 'type_equipement' => $type,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -80,7 +74,7 @@ class EquipementController extends Controller
         $equipement = Equipement::find($id_equip);
 
         if(is_null($equipement))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -91,7 +85,7 @@ class EquipementController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 }

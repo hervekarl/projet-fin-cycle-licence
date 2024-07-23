@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Salle;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
 
 class SalleController extends Controller
 {
@@ -17,9 +18,9 @@ class SalleController extends Controller
         ]);
 
         if(is_null($salle))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
+        return RequestReturns::INSERT_SUCCESSFUL;
 
     }
 
@@ -35,7 +36,7 @@ class SalleController extends Controller
         $salle = Salle::find($id_sal);
 
         if(is_null($salle))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $salle;
     }
@@ -52,7 +53,7 @@ class SalleController extends Controller
         $salle = Salle::find($id_sal);
 
         if(is_null($salle))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -63,11 +64,11 @@ class SalleController extends Controller
                 'id_niveau' => $id_niv
             ]);
             
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -76,7 +77,7 @@ class SalleController extends Controller
         $salle = Salle::find($id_sal);
 
         if(is_null($salle))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -87,7 +88,7 @@ class SalleController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 

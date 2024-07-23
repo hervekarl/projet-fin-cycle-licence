@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
 
 class PatientController extends Controller
 {
@@ -39,10 +40,9 @@ class PatientController extends Controller
         ]);
 
         if(is_null($patient))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
-    }
+        return RequestReturns::INSERT_SUCCESSFUL;    }
 
     public function create(Request $request)
     {
@@ -56,7 +56,7 @@ class PatientController extends Controller
         $patient = Patient::find($id_pat);
 
         if(is_null($patient))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $patient;
     }
@@ -100,7 +100,7 @@ class PatientController extends Controller
         $patient = Patient::find($id_pat);
 
         if(is_null($patient))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -109,11 +109,11 @@ class PatientController extends Controller
                 'numero_patient' => $num,
                 ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -122,7 +122,7 @@ class PatientController extends Controller
         $patient = Patient::find($id_pat);
 
         if(is_null($patient))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -133,7 +133,7 @@ class PatientController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 }

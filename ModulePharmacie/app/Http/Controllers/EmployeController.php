@@ -41,10 +41,9 @@ class EmployeController extends Controller
         ]);
 
         if(is_null($employe))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
-    }
+        return RequestReturns::INSERT_SUCCESSFUL;    }
 
     public function create(Request $request)
     {
@@ -58,7 +57,7 @@ class EmployeController extends Controller
         $employe = Employe::find($id_emp);
 
         if(is_null($employe))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $employe;
     }
@@ -103,7 +102,7 @@ class EmployeController extends Controller
         $employe = Employe::find($id_emp);
 
         if(is_null($employe))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -112,11 +111,11 @@ class EmployeController extends Controller
                 'numero_employe' => $num,
                 ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -125,7 +124,7 @@ class EmployeController extends Controller
         $employe = Employe::find($id_emp);
 
         if(is_null($employe))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -136,7 +135,7 @@ class EmployeController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 }

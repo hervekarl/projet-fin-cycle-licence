@@ -14,7 +14,7 @@ class RequestReturns
 
     public const UPDATE_FAILED = 300;
     public const UPDATE_SUCCESSFUL = 301;
-    public const UPDAT_NOT_PERMIT = 302;
+    public const UPDATE_NOT_PERMIT = 302;
 
     public const DELETE_FAILED = 400;
     public const DELETE_SUCCESSFUL = 401;
@@ -25,14 +25,15 @@ class RequestReturns
     
     public const ALREADY_EXIST = 600;
     
-    public const NOT_CONNECTED = 700;
+    public const CONNECTED = 700;
 
-    public const CONNECTION_SUCCESSFUL = 800;
+    public const NOT_CONNECTED = 800;
 
-    public const DECONNECTION_SUCCESSFUL = 800;
+    public const CONNECTION_SUCCESSFUL = 900;
+
+    public const DECONNECTION_SUCCESSFUL = 1000;
 
 
-    public const UNIDENTIFIED = 1000;
 
 
 

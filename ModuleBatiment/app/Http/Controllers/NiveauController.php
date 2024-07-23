@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Niveau;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
 
 class NiveauController extends Controller
 {
@@ -17,9 +18,9 @@ class NiveauController extends Controller
         ]);
 
         if(is_null($niveau))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
+        return RequestReturns::INSERT_SUCCESSFUL;
 
     }
 
@@ -35,7 +36,7 @@ class NiveauController extends Controller
         $niveau = Niveau::find($id_niv);
 
         if(is_null($niveau))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $niveau;
     }
@@ -44,15 +45,35 @@ class NiveauController extends Controller
     {
         $niveaux = Niveau::all();
 
+        $nivs;
+
+        // foreach($niveaux as $niveau)
+        // {
+        //     array_push($niv, $niveau)
+        // }
+
         return $niveaux;
     }
+
+    public function batiment($id_niv)
+    {
+        $niveau = Niveau::find($id_niv);
+
+        if(is_null($niveau))
+            return RequestReturns::NOT_EXIST;
+
+
+        // dd($niveau->batiment);
+        return $niveau->batiment;
+    }
+
         
     public function update($id_niv, $num_etage, $nbre_salle, $id_bat)
     {
         $niveau = Niveau::find($id_niv);
 
         if(is_null($niveau))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -63,11 +84,11 @@ class NiveauController extends Controller
                 'id_batiment' => $id_bat
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -76,7 +97,7 @@ class NiveauController extends Controller
         $niveau = Niveau::find($id_niv);
 
         if(is_null($niveau))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -87,7 +108,7 @@ class NiveauController extends Controller
         
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 

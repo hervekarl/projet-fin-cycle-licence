@@ -13,22 +13,12 @@ return new class extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id_user');
-            $table->string('name');
-            $table->string('email');
+            $table->string('name')->unique();
+            // $table->string('email')->unique();
             $table->string('password');
-
-            $table->boolean('can_insert');
-            $table->boolean('can_select');
-            $table->boolean('can_update');
-            $table->boolean('can_delete');
-            $table->boolean('is_admin');
-
-            $table->boolean('is_connected');
-            
-            $table->integer('id_module')->unsigned();
-
-            
-            $table->foreign('id_module')->references('id_module')->on('module');
+            // $table->boolean('is_admin');
+            // $table->boolean('is_connected');
+            // $table->integer('id_admin')->unsigned()->nullable();
         });
     }
 

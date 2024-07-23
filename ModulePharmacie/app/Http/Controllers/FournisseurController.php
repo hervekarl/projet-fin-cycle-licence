@@ -17,10 +17,9 @@ class FournisseurController extends Controller
         ]);
 
         if(is_null($fournisseur))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
-    }
+        return RequestReturns::INSERT_SUCCESSFUL;    }
 
     public function create(Request $request)
     {
@@ -34,7 +33,7 @@ class FournisseurController extends Controller
         $fournisseur = Fournisseur::find($id_fou);
 
         if(is_null($fournisseur))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $fournisseur;
     }
@@ -51,7 +50,7 @@ class FournisseurController extends Controller
         $fournisseur = Fournisseur::find($id_fou);
 
         if(is_null($fournisseur))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -62,11 +61,11 @@ class FournisseurController extends Controller
                 'adresse_fournisseur' => $adresse,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -75,7 +74,7 @@ class FournisseurController extends Controller
         $fournisseur = Fournisseur::find($id_fou);
 
         if(is_null($fournisseur))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         try
         {
@@ -86,7 +85,7 @@ class FournisseurController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 }

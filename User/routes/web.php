@@ -24,17 +24,15 @@ Route::prefix('user')->group(function(){
     
     Route::get('/read', [UserController::class, 'index'])->name('user.index');
     Route::get('/read/{id_user}', [UserController::class, 'show'])->name('user.show');
-    // Route::post('/create/{name}/{email}/{passwd}/{admin}/{id_mod}', [UserController::class, 'update'])->name('user.update');
-    Route::post('/create/{name}/{email}/{passwd}', [UserController::class, 'store'])->name('user.store');
+    Route::get('/login/{name}/{passwd}', [UserController::class, 'login'])->name('user.login');
+    // Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
+    // Route::post('/create/{name}/{passwd}/{admin}/{id_mod}', [UserController::class, 'update'])->name('user.update');
+    Route::post('/create/{name}/{passwd}', [UserController::class, 'store'])->name('user.store');
     Route::post('/create', [UserController::class, 'create'])->name('user.create');
-    // Route::put('/update/{id_user}/{name}/{email}/{passwd}/{admin}/{id_mod}', [UserController::class, 'update'])->name('user.update');
-    Route::put('/update/{id_user}/{name}/{email}/{passwd}/', [UserController::class, 'update'])->name('user.update');
+    // Route::put('/update/{id_user}/{name}/{passwd}/{admin}/{id_mod}', [UserController::class, 'update'])->name('user.update');
+    Route::put('/update/{id_user}/{name}/{passwd}', [UserController::class, 'update'])->name('user.update');
 
-    // Route::put('/update/{id_user}/{name}/{email}/{passwd}/{insert}/{select}/{update}/{delete}/{admin}/{id_mod}', [UserController::class, 'update'])->name('user.update');
-
-
-    Route::put('/update/login/{name}/{passwd}', [UserController::class, 'login'])->name('user.login');
-    Route::put('/update/logout', [UserController::class, 'logout'])->name('user.logout');
+    // Route::put('/update/{id_user}/{name}/{passwd}/{insert}/{select}/{update}/{delete}/{admin}/{id_mod}', [UserController::class, 'update'])->name('user.update');
 
     Route::delete('/delete/{id_user}', [UserController::class, 'destroy'])->name('user.destroy');
     Route::delete('/delete', [UserController::class, 'truncate'])->name('user.truncate');

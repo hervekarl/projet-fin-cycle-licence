@@ -6,6 +6,7 @@ use DateTime;
 use App\Models\Occuper;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
 
 class OccuperController extends Controller
 {
@@ -26,13 +27,13 @@ class OccuperController extends Controller
             ]);
             
             if(is_null($occupation2))
-                return "";
+                return RequestReturns::NOT_EXIST;
 
-            return "Ajout reussit";
+            return RequestReturns::INSERT_SUCCESSFUL;        
         }
         catch(QueryException $e)
         {
-            return ""; //Ajout echouee
+            return RequestReturns::INSERT_FAILED;        
         }
     }
 
@@ -48,9 +49,9 @@ class OccuperController extends Controller
         $occupation = Occuper::where(['id_salle' => $id_sal, 'id_patient' => $id_pat, 'date_debut' => $date_debut])->first();
         
         if(is_null($occupation))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
-        return $occupation;
+        return $possession;
     }
 
     public function index_show($id_sal, $id_pat)
@@ -58,7 +59,7 @@ class OccuperController extends Controller
         $occupations = Occuper::where(['id_salle' => $id_sal, 'id_patient' => $id_pat])->get();
 
         if(is_null($occupations))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $occupations;
     }
@@ -75,7 +76,7 @@ class OccuperController extends Controller
         $occupation = Occuper::where(['id_salle' => $id_sal, 'id_patient' => $id_pat, 'date_debut' => $date_debut]);
         
         if(is_null($occupation->first()))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
     
         try
         {
@@ -86,20 +87,43 @@ class OccuperController extends Controller
                 'date_fin' => $date_fin,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
+
+    
+    public function destroy($id_sal, $id_pat, $date_debut)
+    {
+        $occupation = Occuper::where(['id_salle' => $id_sal, 'id_patient' => $id_pat, 'date_debut' => $date_debut]);
+        $occupation2 = $occupation->first();
+
+        if(is_null($occupation2))
+        return RequestReturns::NOT_EXIST;
+
+    $occupation->delete();
+    }
+    
+    
+    public function truncate()
+    {
+        Occuper::truncate();
+        // Occuper::query()->delete();
+
+        return RequestReturns::DELETE_SUCCESSFUL;
+    }
+
+    //--------------------------------------------------------------------------------------------------------
 
     public function end_occupation($occupation)
     {
         $now = new DateTime();
-
+    
         $occupation2 = $occupation->first();
-
+    
         if(!is_null($occupation2))
             $occupation->update([
                 'id_salle' => $occupation2->id_sal,
@@ -107,27 +131,8 @@ class OccuperController extends Controller
                 'date_debut' => $occupation2->date_debut,
                 'date_fin' => $now,
             ]);
-    }
 
-    public function destroy($id_sal, $id_pat, $date_debut)
-    {
-        $occupation = Occuper::where(['id_salle' => $id_sal, 'id_patient' => $id_pat, 'date_debut' => $date_debut]);
-        $occupation2 = $occupation->first();
-
-        if(is_null($occupation2))
-            return "null";
-
-        $occupation->delete();
-
-        return $occupation2;
-    }
-
-    public function truncate()
-    {
-        Occuper::truncate();
-        // Occuper::query()->delete();
-
-        return "Table videe";
+            return $occupation2;
     }
 }
 

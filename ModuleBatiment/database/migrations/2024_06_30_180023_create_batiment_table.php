@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('batiment', function (Blueprint $table) {
             $table->increments('id_batiment');
+            $table->string('nom_batiment')->unique();
             $table->integer('nbre_niveau');
         });
     }

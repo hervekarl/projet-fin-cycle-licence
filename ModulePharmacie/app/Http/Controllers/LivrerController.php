@@ -24,13 +24,13 @@ class LivrerController extends Controller
             ]);
             
             if(is_null($livraison))
-                return "";
-
-            return "Ajout reussit";
+                return RequestReturns::NOT_EXIST;
+    
+            return RequestReturns::INSERT_SUCCESSFUL;        
         }
         catch(QueryException $e)
         {
-            return ""; //Ajout echouee
+            return RequestReturns::INSERT_FAILED;        
         }
     }
 
@@ -46,7 +46,7 @@ class LivrerController extends Controller
         $livraison = Livrer::where(['id_fournisseur' => $id_fou, 'id_medicamment' => $id_med, 'date_livre' => $date])->first();
         
         if(is_null($livraison))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $livraison;
     }
@@ -56,7 +56,7 @@ class LivrerController extends Controller
         $livraisons = Livrer::where(['id_fournisseur' => $id_fou, 'id_medicamment' => $id_med])->get();
 
         if(is_null($livraisons))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $livraisons;
     }
@@ -73,7 +73,7 @@ class LivrerController extends Controller
         $livraison = Livrer::where(['id_fournisseur' => $id_fou, 'id_medicamment' => $id_med, 'date_livre' => $date]);
         
         if(is_null($livraison->first()))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
     
         try
         {
@@ -85,11 +85,11 @@ class LivrerController extends Controller
                 'montant' => $montant,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -100,7 +100,7 @@ class LivrerController extends Controller
         $livraison2 = $livraison->first();
         
         if(is_null($livraison2))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         $livraison->delete();
 
@@ -112,6 +112,6 @@ class LivrerController extends Controller
         Livrer::truncate();
         // Livrer::query()->delete();
 
-        return "Table videe";
+        return RequestReturns::DELETE_SUCCESSFUL;    
     }
 }

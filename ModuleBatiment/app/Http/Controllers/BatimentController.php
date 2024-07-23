@@ -5,26 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Batiment;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\RequestReturns;
 
 class BatimentController extends Controller
 {
-    public function store($nbre_niveau)
+    public function store($nbre_niveau, $nom)
     {
         $batiment = Batiment::create([
-            'nbre_niveau' => $nbre_niveau
+            'nbre_niveau' => $nbre_niveau, 
+            'nom_batiment' => $nom
         ]);
 
         if(is_null($batiment))
-            return "";
+            return RequestReturns::NOT_EXIST;
 
-        return "Ajout reussit";
+
+        return RequestReturns::INSERT_SUCCESSFUL;
     }
 
     public function create(Request $request)
     {
         $batiment = $request->all();
 
-        return $this->store($batiment["nbre_niveau"]);
+        return $this->store($batiment["nbre_niveau"], $batiment["nom_batiment"]);
     }
     
     public function show($id_bat)
@@ -32,7 +35,7 @@ class BatimentController extends Controller
         $batiment = Batiment::find($id_bat);
 
         if(is_null($batiment))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $batiment;
     }
@@ -44,25 +47,26 @@ class BatimentController extends Controller
         return $batiments;
     }
         
-    public function update($id_bat, $nbre_niveau)
+    public function update($id_bat, $nbre_niveau, $nom)
     {
         $batiment = Batiment::find($id_bat);
 
         if(is_null($batiment))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
 
         try
         {
             $batiment->update([
                 'id_batiment' => $id_bat,
-                'nbre_niveau' => $nbre_niveau
-            ]);
+                'nbre_niveau' => $nbre_niveau, 
+                'nom_batiment' => $nom
+                ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -71,8 +75,8 @@ class BatimentController extends Controller
         $batiment = Batiment::find($id_bat);
 
         if(is_null($batiment))
-            return null;
-
+            return RequestReturns::NOT_EXIST;
+    
         try
         {
             $batiment->delete();
@@ -82,7 +86,7 @@ class BatimentController extends Controller
 
         catch(QueryException $e)
         {
-            return "Suppression échoué";
+            return RequestReturns::DELETE_FAILED;
         }
     }
 

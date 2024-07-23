@@ -23,13 +23,13 @@ class CommanderController extends Controller
             ]);
             
             if(is_null($commande))
-                return "";
-
-            return "Ajout reussit";
+                return RequestReturns::NOT_EXIST;
+    
+            return RequestReturns::INSERT_SUCCESSFUL;        
         }
         catch(QueryException $e)
         {
-            return ""; //Ajout echouee
+            return RequestReturns::INSERT_FAILED;        
         }
     }
 
@@ -45,7 +45,7 @@ class CommanderController extends Controller
         $commande = Commander::where(['id_employe' => $id_emp, 'id_medicamment' => $id_med, 'date_command' => $date])->first();
         
         if(is_null($commande))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $commande;
     }
@@ -55,7 +55,7 @@ class CommanderController extends Controller
         $commandes = Commander::where(['id_employe' => $id_emp, 'id_medicamment' => $id_med])->get();
 
         if(is_null($commandes))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $commandes;
     }
@@ -72,7 +72,7 @@ class CommanderController extends Controller
         $commande = Commander::where(['id_employe' => $id_emp, 'id_medicamment' => $id_med, 'date_command' => $date]);
         
         if(is_null($commande->first()))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
     
         try
         {
@@ -83,11 +83,11 @@ class CommanderController extends Controller
                 'quantite' => $quantite,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -98,7 +98,7 @@ class CommanderController extends Controller
         $commade2 = $commande->first();
         
         if(is_null($commande2))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         $commande->delete();
 
@@ -110,6 +110,6 @@ class CommanderController extends Controller
         Commander::truncate();
         // Commander::query()->delete();
 
-        return "Table videe";
+        return RequestReturns::DELETE_SUCCESSFUL;
     }
 }

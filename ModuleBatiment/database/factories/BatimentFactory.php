@@ -17,7 +17,8 @@ class BatimentFactory extends Factory
     public function definition(): array
     {
         return [
-            'nbre_niveau' => fake()->numberBetween(1, 10) // Exemple de génération aléatoire
+            'nom_batiment' => fake()->unique()->word, // Exemple de génération aléatoire
+            'nbre_niveau' => fake()->numberBetween(1, 10), // Exemple de génération aléatoire
         ];
     }
 }

@@ -24,13 +24,13 @@ class AcheterController extends Controller
             ]);
             
             if(is_null($achat))
-                return "";
-
-            return "Ajout reussit";
+                return RequestReturns::NOT_EXIST;
+    
+            return RequestReturns::INSERT_SUCCESSFUL;        
         }
         catch(QueryException $e)
         {
-            return ""; //Ajout echouee
+            return RequestReturns::INSERT_FAILED;        
         }
     }
 
@@ -46,7 +46,7 @@ class AcheterController extends Controller
         $achat = Acheter::where(['id_patient' => $id_pat, 'id_medicamment' => $id_med, 'date_achat' => $date])->first();
         
         if(is_null($achat))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $achat;
     }
@@ -56,7 +56,7 @@ class AcheterController extends Controller
         $achats = Acheter::where(['id_patient' => $id_pat, 'id_medicamment' => $id_med])->get();
 
         if(is_null($achats))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         return $achats;
     }
@@ -73,7 +73,7 @@ class AcheterController extends Controller
         $achat = Acheter::where(['id_patient' => $id_pat, 'id_medicamment' => $id_med, 'date_achat' => $date]);
         
         if(is_null($achat->first()))
-            return null; //Enregistrement n'existe pas
+            return RequestReturns::NOT_EXIST;
     
         try
         {
@@ -85,11 +85,11 @@ class AcheterController extends Controller
                 'prix_unitaire' => $prix,
             ]);
 
-            return "Mise à jour reussit";
+            return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
         {
-            return ""; //Mise à jour echouee
+            return RequestReturns::UPDATE_FAILED;
         }
     }
 
@@ -100,7 +100,7 @@ class AcheterController extends Controller
         $achat2 = $achat->first();
         
         if(is_null($achat2))
-            return null;
+            return RequestReturns::NOT_EXIST;
 
         $achat->delete();
 
@@ -112,6 +112,6 @@ class AcheterController extends Controller
         Acheter::truncate();
         // Acheter::query()->delete();
 
-        return "Table videe";
+        return RequestReturns::DELETE_SUCCESSFUL;    
     }
 }

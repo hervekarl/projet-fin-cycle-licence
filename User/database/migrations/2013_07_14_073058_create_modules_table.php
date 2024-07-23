@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function p(): void
     {
         Schema::create('module', function (Blueprint $table) {
             $table->increments('id_module');

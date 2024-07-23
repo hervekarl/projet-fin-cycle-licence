@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function p(): void
     {
         Schema::create('manipuler', function (Blueprint $table) {
             $table->integer('id_user')->unsigned();

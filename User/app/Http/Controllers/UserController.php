@@ -2,60 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use PDO;
-use PDOException;
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 
-require "sess_config.php";
-
 class UserController extends Controller
 {
-    public function store($name, $email, $passwd)
+    public function store($name, $passwd, Request $request)
     {
         try
         {   
-            start_sess();
-            $users = User::where('name', $_SESSION['name']);
-
-            if(!$user->first()->is_admin)
-                return RequestReturns::INSERT_NOT_PERMIT;
-
+            // $user2 = User::where('email', $email);
+            
+            // $user3 = null;
+            
+            // if($request->session()->has('id'))
+            //     $user3 = User::find($request->session()->get('id'));
+            
+            
+            $user = User::where('name', $name);
+            
             $create_table = [
                 'name' => $name,
-                'email' => $email,
+                // 'email' => $email,
                 'password' => $passwd,
-
-                'can_insert' => true,
-                'can_select' => true,
-                'can_update' => true,
-                'can_delete' => true,                                                                
-                'is_admin' => true,
-                
-                'is_connected' => false,
-                'id_module' => 1
             ];
-            $user = User::create($create_table);
+            
+            if(is_null($user->first()))
+            {
+                $user = User::create($create_table);
 
-            $create_table['id_module'] = 2;
-            $user = User::create($create_table);
+                return RequestReturns::INSERT_SUCCESSFUL;
+            }
 
-            $create_table['id_module'] = 3;
-            $user = User::create($create_table);
-
-            $create_table['id_module'] = 4;
-            $user = User::create($create_table);
+            else
+                return RequestReturns::ALREADY_EXIST;
 
             if(is_null($user))
-                return INSERT_FAILED;
+                return RequestReturns::INSERT_FAILED;
         
-            return RequestReturns::INSERT_SUCCESSFUL;
-        }
-        catch(QueryException $e)
-        {
-            return RequestReturns::ALREADY_EXIST;
         }
         catch(ErrorException $e)
         {
@@ -67,16 +52,19 @@ class UserController extends Controller
     {
         $user = $request->all();
 
-        return $this->store($user["name"], $user["email"], $user["password"], $user["is_admin"]);
+        return $this->store($user["name"], $user["password"]);
     }
     
     public function show($id_user)
     {
-        start_sess();
-        $user2 = User::find($_SESSION['id']);
+        // $user2 = new User();
+        // $user2->is_admin = false;
+
+        // if($request->session()->has('id'))
+        //     $user2 = User::find($request->session()->get('id'));
         
-        if(!$user2->is_admin)
-            return RequestReturns::SELECT_NOT_PERMIT;
+        // if(!$user2->is_admin)
+        //     return RequestReturns::SELECT_NOT_PERMIT;
 
 
         $user = User::find($id_user);
@@ -87,13 +75,16 @@ class UserController extends Controller
         return $user;
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        start_sess();
-        $users2 = User::where('name', $_SESSION['name']);
+        // $user2 = new User();
+        // $user2->is_admin = false;
 
-        if(!$user2->first()->is_admin)
-            return RequestReturns::SELECT_NOT_PERMIT;
+        // if($request->session()->has('id'))
+        //     $user2 = User::find($request->session()->get('id'));
+
+        // if(!$user2->is_admin)
+        //     return $request->session()->get('id');
 
 
         $users = User::all();
@@ -101,31 +92,57 @@ class UserController extends Controller
         return $users;
     }
 
-    public function update($name, $email, $passwd)
+    public function update($id_user, $name, $passwd, Request $request)
     {
-        // $user = User::find($id_user);
+        $user = User::find($id_user);
 
-        // if(is_null($user))
-        //     return RequestReturns::NOT_EXIST;
+        if(is_null($user))
+            return RequestReturns::NOT_EXIST;
 
         try
         {
-            start_sess();
-            $users = User::where('name', $_SESSION['name']);
+            // $user = User::where('name', $name);
+            // // $user2 = User::where('email', $email);
+            // $user3 = User::find($request->session()->get('id'));
 
             // if(!$users->first()->is_admin)
             //     return RequestReturns::UPDATE_NOT_PERMIT;
-            
-            foreach($users->get() as $user2)
-            {
-                $user = $users->update([
-                    'id_user' => $user2->id_uer,
-                    'name' => $user2->name,
-                    'email' => $user2->email,
-                    'password' => $user2->passwd,
-                ]);
-            }
 
+            $update_table = [
+                'id_user' => $id_user,
+                'name' => $name,
+                // 'email' => $email,
+                'password' => $passwd,
+            ];
+
+            $user->update($update_table);
+
+            // if(is_null($user->first()) && is_null($user2->first()))
+            // {
+            //     if(!$user3->is_admin)
+            //     {
+            //         if($id_user != $user3->id_user)
+                        // return RequestReturns::UPDATE_NOT_PERMIT;
+    
+            //     }
+    
+            //     else
+            //     {
+            //         if($id_user == $user3->id_user)
+            //             $user0->update($update_table);
+
+            //         else
+            //         {
+            //             $update_table['id_admin'] = $admin;
+            //             $user0->update($update_table);
+            //         }
+            //     }    
+            // }
+
+            // else
+            //     return RequestReturns::ALREADY_EXIST;
+
+            
             return RequestReturns::UPDATE_SUCCESSFUL;
         }
         catch(QueryException $e)
@@ -134,68 +151,27 @@ class UserController extends Controller
         }
     }
 
-        
-    // public function update($id_user, $name, $email, $passwd, $admin, $id_mod)
-    // {
-    //     $user = User::find($id_user);
-
-    //     if(is_null($user))
-    //         return RequestReturns::NOT_EXIST;
-
-    //     try
-    //     {
-    //         start_sess();
-    //         $user2 = User::find($_SESSION['id']);
-            
-    //         if(!$user2->is_user != )
-    //             return RequestReturns::UPDATE_NOT_PERMIT;
-
-    //         $user = User::find($id_user)->update([
-    //             'id_user' => $id_user,
-    //             'name' => $name,
-    //             'email' => $email,
-    //             'password' => $passwd,
-
-    //             'can_insert' => false,
-    //             'can_select' => false,
-    //             'can_update' => false,
-    //             'can_delete' => false,                                                                
-    //             'is_admin' => $admin,
-                
-    //             'is_connected' => false,
-    //             'id_module' => $id_mod
-    //         ]);
-            
-    //         return RequestReturns::UPDATE_SUCCESSFUL;
-    //     }
-    //     catch(QueryException $e)
-    //     {
-    //         return RequestReturns::UPDATE_FAILED;
-    //     }
-    // }
-
-    public function destroy($name)
+    public function destroy($id_user, Request $request)
     {
-        // $user = User::find($id_user);
+        $user = User::find($id_user);
 
-        // if(is_null($user))
-        //     return RequestReturns::NOT_EXIST;
+        if(is_null($user))
+            return RequestReturns::NOT_EXIST;
 
         try
         {
-            start_sess();
-            $users = User::where('name', $_SESSION['name']);
+            // $user2 = new User();
+            // $user2->is_admin = false;
 
-            if(!$users->first()->is_admin)
-                return RequestReturns::DELETE_NOT_PERMIT;
+            // if($request->session()->has('id'))
+            //     $user2 = User::find($request->session()->get('id'));
 
+            // if(!$user2->is_admin)
+            //     return RequestReturns::DELETE_NOT_PERMIT;
 
-            foreach($users->get() as $user2)
-            {
-                $user2->delete();
-            }
+            $user->delete();
 
-            return DELETE_SUCCESSFUL;
+            return $user;
         }
 
         catch(QueryException $e)
@@ -206,42 +182,47 @@ class UserController extends Controller
 
     public function truncate()
     {
-        $users  = User::all();
+        // $users  = User::all();
 
-        foreach($users as $user)
-        {
-            if($user->name != 'postgres' || $user->name != 'moi')
-                $this->destroy($user->id_user);
-        }
+        // foreach($users as $user)
+        // {
+        //     if($user->name != 'postgres' || $user->name != 'moi')
+        //         $this->destroy($user->id_user);
+        // }
 
+        Batiment::truncate();
+        
         return RequestReturns::DELETE_SUCCESSFUL;
     }
 
+    //------------------------------------------------------------------------------------------
     
-    public function login($name, $passwd)
+    public function login($name, $passwd, Request $request)
     {
-        $user = User::where(['name' => $name, 'password' => $passwd]);
-        $user2 = $users->first();
+        $user = User::where(['name' => $name, 'password' => $passwd])->first();
 
-        if(is_null($user2))
+        if(is_null($user))
             return RequestReturns::NOT_EXIST;
         
-        start_sess();
-        $user2->is_connected = true;
-        $user2->save();
-        $_SESSION['name'] = $name;
+        // setcookie("connected", "true", time() + 1, "", "", false, true);
 
-        return RequestReturns::CONNECTION_SUCCESSFUL;
+        // $request->session()->put('id', $user->id_user);
+
+        return ['id' => $user->id_user];
     }
 
-    public function logout()
-    {
-        start_sess();
-        $user = User::find($_SESSION['name']);
-        $user->is_connected = false;
-        $user->save();
-        $_SESSION['id'] = null;
-        end_sess();
-        return RequestReturns::DECONNECTION_SUCCESSFUL;
-    }
+    // public function logout(Request $request)
+    // {
+    //     // if(!isset($_COOKIE["connected"]))
+    //     // {
+    //     // }
+    //     if($request->session()->has('id'))
+    //     {
+    //         $request->session()->forget('id');
+
+    //         return RequestReturns::DECONNECTION_SUCCESSFUL;    
+    //     }
+
+    //     return RequestReturns::CONNECTED;
+    // }
 }

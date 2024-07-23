@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Module;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,19 +20,20 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'password' => 'z', // password
+            'name' => fake()->firstName(),
+            // 'email' => fake()->unique()->safeEmail(),
+            'password' => fake()->word, // password
+            
+            // 'is_admin' => false,
+            // 'is_connected' => false,
+            
+            // 'id_admin'=> User::inRandomOrder()->first()
 
-            'can_insert' => false, 
-            'can_select' => false, 
-            'can_update' => false, 
-            'can_delete' => false, 
-            'is_admin' => fake()->randomElement([false, true]), 
+            // 'can_insert' => false, 
+            // 'can_select' => false, 
+            // 'can_update' => false, 
+            // 'can_delete' => false, 
 
-            'is_connected' => false,
-
-            'id_module'=> Module::inRandomOrder()->first()
         ];
     }
 

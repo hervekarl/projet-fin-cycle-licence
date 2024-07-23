@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Batiment::factory(20)->create();
+        Patient::factory(20)->create();
         Niveau::factory(20)->create();
         Salle::factory(20)->create();
         Equipement::factory(20)->create();
         Posseder::factory(20)->create();
         Occuper::factory(20)->create();
-        Patient::factory(20)->create();
     }
 }

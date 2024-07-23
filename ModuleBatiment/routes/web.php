@@ -31,9 +31,9 @@ Route::prefix('batiment')->group(function(){
     
     Route::get('/read', [BatimentController::class, 'index'])->name('batiment.index');
     Route::get('/read/{id_bat}', [BatimentController::class, 'show'])->name('batiment.show');
-    Route::post('/create/{nbre_niveau}', [BatimentController::class, 'store'])->name('batiment.store');
+    Route::post('/create/{nom}/{nbre_niveau}', [BatimentController::class, 'store'])->name('batiment.store');
     Route::post('/create', [BatimentController::class, 'create'])->name('batiment.create');
-    Route::put('/update/{id_bat}/{nbre_niveau}', [BatimentController::class, 'update'])->name('batiment.update');
+    Route::put('/update/{id_bat}/{nom}/{nbre_niveau}', [BatimentController::class, 'update'])->name('batiment.update');
     Route::delete('/delete/{id_bat}', [BatimentController::class, 'destroy'])->name('batiment.destroy');
     // Route::delete('/delete', [BatimentController::class, 'truncate'])->name('batiment.truncate');
 });
@@ -44,6 +44,7 @@ Route::prefix('niveau')->group(function(){
     
     Route::get('/read', [NiveauController::class, 'index'])->name('niveau.index');
     Route::get('/read/{id_niv}', [NiveauController::class, 'show'])->name('niveau.show');
+    Route::get('/batiment/{id_niv}', [NiveauController::class, 'batiment'])->name('salle.batiment');
     Route::post('/create/{num_etage}/{nbre_salle}/{id_bat}', [NiveauController::class, 'store'])->name('niveau.store');
     Route::post('/create', [NiveauController::class, 'create'])->name('niveau.create');
     Route::put('/update/{id_niv}/{num_etage}/{nbre_salle}/{id_bat}', [NiveauController::class, 'update'])->name('niveau.update');

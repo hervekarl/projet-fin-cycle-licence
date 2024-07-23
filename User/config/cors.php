@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['http://127.0.0.1:8003*', 'http://127.0.0.1:8000/*', 'sanctum/csrf-cookie'],
+    'paths' => ['http://127.0.0.1:8013/*', 'http://127.0.0.1:8000/*', 'http://localhost:8013/*', 'http://localhost:8000/*', 'sanctum/csrf-cookie', 'user/*', 'http://localhost:3000'],
 
     'allowed_methods' => ['*'],
 
@@ -28,6 +28,8 @@ return [
     'exposed_headers' => [],
 
     'max_age' => 0,
+
+    'wildcard' => ['*'],
 
     'supports_credentials' => false,
 
